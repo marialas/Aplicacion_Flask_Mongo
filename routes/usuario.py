@@ -2,38 +2,41 @@ from models.usuario import Usuario
 from utils.email import enviarCorreo
 import random
 import string
-from flask import request, jsonify, session
-from app import app
+from flask import request, jsonify, session, render_template
 
+def registrar_rutas_usuario(app):
 
-@app.route("/login", methods=['POST'])
-def login():
-    datos = request.get_json(force=True)
-    usuario = Usuario.objects(usuario=datos.get("usuario"), password=datos.get("password")).first()
-    if usuario:
-        session["usuario"] = usuario.usuario
-        return jsonify({"estado": True, "mensaje": "Inicio de sesión exitoso"}), 200
-    else:
-        return jsonify({"estado": False, "mensaje": "Credenciales incorrectas"}), 401
+    @app.route("/")
+    def inicio():
+        if "usuario" not in session:
+            return render_template("login.html")
+        return render_template("contenido.html")
 
-@app.route("/logout", methods=["GET"])
-def logout():
-    session.pop("usuario", None)
-    return jsonify({"mensaje": "Sesión cerrada"}), 200
+    @app.route("/login", methods=['POST'])
+    def login():
+        datos = request.get_json(force=True)
+        usuario = Usuario.objects(usuario=datos.get("usuario"), password=datos.get("password")).first()
+        if usuario:
+            session["usuario"] = usuario.usuario
+            return jsonify({"estado": True, "mensaje": "Inicio de sesión exitoso"}), 200
+        else:
+            return jsonify({"estado": False, "mensaje": "Credenciales incorrectas"}), 401
 
-@app.route("/recuperar", methods=["POST"])
-def recuperar():
-    datos = request.get_json(force=True)
-    usuario = Usuario.objects(usuario=datos.get("usuario")).first()
+    @app.route("/logout", methods=["GET"])
+    def logout():
+        session.pop("usuario", None)
+        return jsonify({"mensaje": "Sesión cerrada"}), 200
 
-    if not usuario:
-        return jsonify({"mensaje": "Usuario no encontrado"}), 404
+    @app.route("/recuperar", methods=["POST"])
+    def recuperar():
+        datos = request.get_json(force=True)
+        usuario = Usuario.objects(usuario=datos.get("usuario")).first()
 
-    # Generar nueva contraseña
-    nueva = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-    usuario.update(password=nueva)
+        if not usuario:
+            return jsonify({"mensaje": "Usuario no encontrado"}), 404
 
-    # Enviar correo con la nueva contraseña
-    enviarCorreo(usuario.correo, "Nueva contraseña", f"Tu nueva contraseña es: {nueva}")
+        nueva = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        usuario.update(password=nueva)
 
-    return jsonify({"mensaje": "Contraseña actualizada y enviada por correo"}), 200
+        enviarCorreo(usuario.correo, "Nueva contraseña", f"Tu nueva contraseña es: {nueva}")
+        return jsonify({"mensaje": "Contraseña actualizada y enviada por correo"}), 200

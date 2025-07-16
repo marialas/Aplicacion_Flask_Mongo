@@ -1,3 +1,4 @@
+from routes.usuario import registrar_rutas_usuario
 from flask import Flask, session
 from flask_mongoengine import MongoEngine
 from flask_cors import CORS
@@ -8,13 +9,14 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+registrar_rutas_usuario(app)
 app.secret_key = os.getenv("SECRET_KEY")
 CORS(app)
 
 # Configuración de MongoDB
 app.config['MONGODB_SETTINGS'] = {
     'host': os.getenv("MONGODB_HOST")
-    
+
 }
 
 db = MongoEngine(app)
@@ -62,11 +64,4 @@ if genero and not Pelicula.objects(codigo=101):
 
 
 
-from flask import render_template
-
-@app.route("/")
-def inicio():
-    if "usuario" not in session:
-        return render_template("login.html")
-    return render_template("contenido.html")
    
