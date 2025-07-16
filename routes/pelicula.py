@@ -3,7 +3,8 @@ from flask import render_template
 from models.pelicula import Pelicula
 from models.genero import Genero
 from app import app
-from utils import login_required
+from utils.utils import login_required
+
 
 @app.route("/pelicula/", methods=['GET'])
 @login_required

@@ -61,8 +61,7 @@ if genero and not Pelicula.objects(codigo=101):
     ).save()
     print("✔ Película creada")
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000, host="0.0.0.0")
+
 
 from flask import render_template
 

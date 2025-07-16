@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask import render_template
 from models.genero import Genero
 from app import app
-from utils import login_required
+from utils.utils import login_required
 
 @app.route("/genero/", methods=['GET'])
 @login_required
