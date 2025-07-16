@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+{% block contenido %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">👥 Lista de Usuarios</h2>
+
+  <div class="card shadow-sm p-4 border-0" style="background-color: #fdf6f0;">
+    <table id="tablaUsuarios" class="table table-bordered table-hover text-center align-middle rounded">
+      <thead class="table-light">
+        <tr>
+          <th>Usuario</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoUsuarios"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DataTables + JQuery -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("/usuario/");
+    const data = await res.json();
+    const cuerpo = document.getElementById("cuerpoUsuarios");
+    cuerpo.innerHTML = "";
+
+    data.usuarios.forEach(u => {
+      cuerpo.innerHTML += `
+        <tr>
+          <td>${u.usuario}</td>
+          <td>${u.nombre}</td>
+          <td>${u.correo}</td>
+        </tr>
+      `;
+    });
+
+    if ($.fn.DataTable.isDataTable('#tablaUsuarios')) {
+      $('#tablaUsuarios').DataTable().destroy();
+    }
+    $('#tablaUsuarios').DataTable({
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+      }
+    });
+  });
+</script>
+{% endblock %}

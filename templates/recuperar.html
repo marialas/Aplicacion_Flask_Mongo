@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block contenido %}
+<div class="container mt-4">
+  <h3 class="text-center mb-4">🔐 Recuperar contraseña</h3>
+  <form id="formRecuperar" onsubmit="recuperarClave(event)" class="col-md-6 mx-auto">
+    <div class="mb-3">
+      <label for="usuario" class="form-label">Nombre de usuario</label>
+      <input type="text" class="form-control" id="usuario" required>
+    </div>
+    <div id="mensajeRecuperar" class="mb-3 text-success fw-bold"></div>
+    <button type="submit" class="btn btn-primary w-100">Enviar nueva contraseña</button>
+  </form>
+</div>
+{% endblock %}

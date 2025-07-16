@@ -3,6 +3,12 @@
     <a class="navbar-brand fw-bold" href="/">🎬 Películas</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('vistaUsuarios') }}">Usuarios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('vistaRegistrar') }}">Registrar Usuario</a>
+        </li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('vistaListaGeneros') }}">Géneros</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('vistaListaPeliculas') }}">Películas</a></li>

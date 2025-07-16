@@ -25,7 +25,7 @@ def registrar_rutas_usuario(app):
     @app.route("/logout", methods=["GET"])
     def logout():
         session.pop("usuario", None)
-        return jsonify({"mensaje": "Sesión cerrada"}), 200
+        return render_template("logout.html")
 
     @app.route("/recuperar", methods=["POST"])
     def recuperar():
@@ -40,3 +40,30 @@ def registrar_rutas_usuario(app):
 
         enviarCorreo(usuario.correo, "Nueva contraseña", f"Tu nueva contraseña es: {nueva}")
         return jsonify({"mensaje": "Contraseña actualizada y enviada por correo"}), 200
+
+    @app.route("/recuperar", methods=["GET"])
+    def vista_recuperar():
+        return render_template("recuperar.html")
+    
+    @app.route("/vistaRegistrar")
+    def vistaRegistrar():
+        return render_template("registro.html")
+
+    @app.route("/registrar", methods=["POST"])
+    def registrar_usuario():
+        datos = request.get_json(force=True)
+        if Usuario.objects(usuario=datos["usuario"]).first():
+            return jsonify({"mensaje": "El usuario ya existe"}), 400
+
+        Usuario(
+            usuario=datos["usuario"],
+            password=datos["password"],
+            nombre=datos["nombre"],
+            correo=datos["correo"]
+        ).save()
+
+        return jsonify({"mensaje": "Usuario registrado exitosamente"}), 200
+
+    @app.route("/vistaUsuarios")
+    def vistaUsuarios():
+        return render_template("usuarios.html")

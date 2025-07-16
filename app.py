@@ -35,7 +35,7 @@ from routes.usuario import *
 if not Usuario.objects(usuario="admin").first():
     Usuario(
         usuario="admin",
-        password="123",
+        password="1FJFMS59",
         nombre="Administrador",
         correo="admin@ejemplo.com"
     ).save()

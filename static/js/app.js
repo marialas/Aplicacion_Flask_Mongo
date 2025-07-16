@@ -24,7 +24,7 @@ async function loginUsuario(e) {
 async function cargarGeneros() {
   const res = await fetch("/genero/");
   const data = await res.json();
-  const tabla = document.getElementById("tablaGeneros");
+  const tabla = document.querySelector("#tablaGeneros tbody");
   tabla.innerHTML = "";
 
   data.generos.forEach(g => {
@@ -32,8 +32,12 @@ async function cargarGeneros() {
       <tr>
         <td>${g.nombre}</td>
         <td>
-          <button onclick="mostrarEditarGenero('${g._id}', '${g.nombre}')">Editar</button>
-          <button onclick="eliminarGenero('${g._id}')">Eliminar</button>
+          <button class="btn btn-sm btn-warning me-1" onclick="mostrarEditarGenero('${g._id}', '${g.nombre}')">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="eliminarGenero('${g._id}')">
+            <i class="bi bi-trash"></i>
+          </button>
         </td>
       </tr>
     `;
@@ -106,10 +110,11 @@ async function editarGenero(id, nombre) {
 async function cargarPeliculas() {
   const res = await fetch("/pelicula/");
   const data = await res.json();
-  const tabla = document.getElementById("tablaPeliculas");
+  const tabla = document.querySelector("#tablaPeliculas tbody");
   tabla.innerHTML = "";
 
   data.peliculas.forEach(p => {
+    console.log(p);
     tabla.innerHTML += `
       <tr>
         <td>${p.codigo}</td>
@@ -120,8 +125,12 @@ async function cargarPeliculas() {
         <td>${p.genero}</td>
         <td><img src="${p.foto}" width="60"></td>
         <td>
-          <a href="/vistaEditarPelicula/${p.id}">✏️</a>
-          <button onclick="eliminarPelicula('${p.id}')">🗑️</button>
+          <a href="/vistaEditarPelicula/${p._id?.$oid || p._id}" class="btn btn-sm btn-outline-secondary me-1">
+            <i class="bi bi-pencil-square"></i>
+          </a>
+          <button class="btn btn-sm btn-outline-danger" onclick="eliminarPelicula('${p._id?.$oid || p._id}')">
+            <i class="bi bi-trash"></i>
+          </button>
         </td>
       </tr>
     `;
@@ -199,6 +208,61 @@ async function editarPelicula(e) {
     mensaje.textContent = "✅ Película actualizada";
   } else {
     mensaje.textContent = "❌ " + data.mensaje;
+  }
+}
+
+// Recuperar contraseña
+async function recuperarClave(e) {
+  e.preventDefault();
+  const usuario = document.getElementById("usuario").value;
+  const mensaje = document.getElementById("mensajeRecuperar");
+
+  const res = await fetch("/recuperar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ usuario })
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    mensaje.textContent = "✅ " + data.mensaje;
+    mensaje.classList.remove("text-danger");
+    mensaje.classList.add("text-success");
+  } else {
+    mensaje.textContent = "❌ " + data.mensaje;
+    mensaje.classList.remove("text-success");
+    mensaje.classList.add("text-danger");
+  }
+}
+
+async function registrarUsuario(e) {
+  e.preventDefault();
+  const form = document.getElementById("formRegistro");
+  const datos = {
+    usuario: form.usuario.value,
+    password: form.password.value,
+    nombre: form.nombre.value,
+    correo: form.correo.value
+  };
+
+  const res = await fetch("/registrar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  });
+
+  const data = await res.json();
+  const mensaje = document.getElementById("mensajeRegistro");
+
+  if (res.ok) {
+    mensaje.textContent = "✅ " + data.mensaje;
+    mensaje.classList.add("text-success");
+    mensaje.classList.remove("text-danger");
+    form.reset();
+  } else {
+    mensaje.textContent = "❌ " + data.mensaje;
+    mensaje.classList.add("text-danger");
+    mensaje.classList.remove("text-success");
   }
 }
 
