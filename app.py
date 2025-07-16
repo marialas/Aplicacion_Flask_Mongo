@@ -13,9 +13,8 @@ CORS(app)
 
 # Configuración de MongoDB
 app.config['MONGODB_SETTINGS'] = {
-    'db': os.getenv("MONGODB_NAME"),
-    'host': os.getenv("MONGODB_HOST"),
-    'port': int(os.getenv("MONGODB_PORT"))
+    'host': os.getenv("MONGODB_HOST")
+    
 }
 
 db = MongoEngine(app)
