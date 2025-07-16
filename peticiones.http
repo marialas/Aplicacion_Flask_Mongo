@@ -1,0 +1,58 @@
+### LOGIN
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+  "usuario": "admin",
+  "password": "123"
+}
+
+### LISTAR GENEROS
+GET http://localhost:5000/genero/
+
+### CREAR GENERO
+POST http://localhost:5000/genero/
+Content-Type: application/json
+
+{
+  "nombre": "Acción"
+}
+
+### EDITAR GENERO
+PUT http://localhost:5000/genero/ID_AQUI
+Content-Type: application/json
+
+{
+  "nombre": "Drama"
+}
+
+### ELIMINAR GENERO
+DELETE http://localhost:5000/genero/ID_AQUI
+
+### LISTAR PELICULAS
+GET http://localhost:5000/pelicula/
+
+### CREAR PELICULA
+POST http://localhost:5000/pelicula/
+Content-Type: application/json
+
+{
+  "codigo": 101,
+  "titulo": "Rápido y Furioso",
+  "protagonista": "Vin Diesel",
+  "duracion": 120,
+  "resumen": "Película de carreras",
+  "foto": "imagen.jpg",
+  "genero": "ID_DEL_GENERO"
+}
+
+### EDITAR PELICULA
+PUT http://localhost:5000/pelicula/ID_AQUI
+Content-Type: application/json
+
+{
+  "duracion": 130
+}
+
+### ELIMINAR PELICULA
+DELETE http://localhost:5000/pelicula/ID_AQUI
