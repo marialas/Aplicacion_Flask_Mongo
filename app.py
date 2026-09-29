@@ -31,13 +31,13 @@ from routes.genero import *
 from routes.pelicula import *
 from routes.usuario import *
 
-# Crear usuario si no existe
-if not Usuario.objects(usuario="admin").first():
+# Crear usuario si no existe (credenciales desde .env, no hardcodeadas)
+if not Usuario.objects(usuario=os.getenv("ADMIN_USER", "admin")).first():
     Usuario(
-        usuario="admin",
-        password="1FJFMS59",
+        usuario=os.getenv("ADMIN_USER", "admin"),
+        password=os.getenv("ADMIN_PASSWORD", "changeme"),
         nombre="Administrador",
-        correo="admin@ejemplo.com"
+        correo=os.getenv("ADMIN_EMAIL", "admin@ejemplo.com")
     ).save()
     print("✔ Usuario admin creado")
 else:
