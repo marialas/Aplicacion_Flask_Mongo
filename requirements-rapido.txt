@@ -1,0 +1,8 @@
+Flask
+Flask-CORS
+python-dotenv
+mongoengine
+pymongo
+dnspython
+email_validator
+flask-mongoengine @ git+https://github.com/idoshr/flask-mongoengine.git@e244408acf440c4208f7ddcd6e5d819cb472e4da
